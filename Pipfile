@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
+
+[packages]
+gino = "*"
+python-dotenv = "*"
+marshmallow-sqlalchemy = "*"
+geoalchemy2 = "*"
+alembic = "*"
+psycopg2-binary = "*"
+
+[packages.connexion]
+extras = [ "aiohttp",]
+
+[packages.networkx]
+extras = [ "default",]
