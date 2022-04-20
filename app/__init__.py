@@ -25,7 +25,7 @@ def create_app(test_db_uri: str | None = None) -> Any:
     )
     connexion_app.add_api(
         "api-spec.yaml",
-        arguments={"title": "test"},
+        # arguments={"title": "test"},
         pythonic_params=True,
         pass_context_arg_name="request",
     )

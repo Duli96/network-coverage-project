@@ -18,3 +18,4 @@ psycopg2-binary = "*"
 connexion = {extras = ["swagger-ui"], version = "*"}
 networkx = {extras = [ "default",]}
 aiohttp = "*"
+openapi-spec-validator = "*"
