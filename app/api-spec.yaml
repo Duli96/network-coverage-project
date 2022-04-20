@@ -1,0 +1,39 @@
+openapi: 3.0.0
+
+info:
+
+  description: This is the swagger OpenAPI UI
+
+  version: "1.0.0"
+
+  title: Final Project
+
+
+
+servers:
+
+  - url: /api
+
+
+
+# Paths supported by the server application
+
+paths:
+
+  /upload:
+
+    get:
+
+      operationId: app.api.start
+
+      summary: Liveness check
+
+      tags:
+
+        - healthcheck
+
+      responses:
+
+        "200": {description: Success}
+
+        "500": {description: Failure}

@@ -15,9 +15,6 @@ marshmallow-sqlalchemy = "*"
 geoalchemy2 = "*"
 alembic = "*"
 psycopg2-binary = "*"
-
-[packages.connexion]
-extras = [ "aiohttp",]
-
-[packages.networkx]
-extras = [ "default",]
+connexion = {extras = ["swagger-ui"], version = "*"}
+networkx = {extras = [ "default",]}
+aiohttp = "*"
