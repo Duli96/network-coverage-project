@@ -6,29 +6,29 @@ servers:
   - url: /api
 paths:
   /network:
-    # get:
-    #   tags:
-    #     - Network
-    #   operationId: app.get_all_cities
-    #   summary: Get all networks
-    #   parameters:
-    #     - name: limit
-    #       in: query
-    #       schema:
-    #         type: integer
-    #         minimum: 0
-    #         default: 100
-    #   responses:
-    #     '200':
-    #       description: Success
-    #       content:
-    #         application/json:
-    #           schema:
-    #             type: array
-    #             items:
-    #               $ref: '#/components/schemas/Network'
-    #     '500':
-    #       description: Failure
+    get:
+      tags:
+        - Network
+      operationId: app.api.get_all_networks
+      summary: Get all network details
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Network'
+        '500':
+          description: Failure
     post:
       operationId: app.api.add_network
       summary: Add new network details into the database
@@ -77,7 +77,7 @@ paths:
       
     
     
-# components:
+components:
 #   parameters:
 #     :
 #       name: city_id
@@ -99,107 +99,113 @@ paths:
 #   # #     scheme: bearer
 #   # #     bearerFormat: JWT
 #   # #     x-bearerInfoFunc: app.decode_token
-#   schemas:
-#     Network:
-#       type: object
-#       required:
-#         - id
-#         - center_hub
-#         - latitude
-#         - longitude
-#         - region_hubs
-#         - towers
-#       properties:
-#         id:
-#           type: string
-#           description: Unique identifier
-#           example: A
-#           readOnly: true
-#         name:
-#           type: string
-#           description: Name of the center hub
-#           example: Mobitel-1
-#           minLength: 1
-#           maxLength: 50
-#         latitude:
-#           type: number
-#           description: Latitude of the center hub
-#           example: 10.456
-#         longitude:
-#           type: number
-#           description: Longitude of the center hub
-#           example: 50.852
-#         region_hubs:
-#           type: array
-#           items:
-#             $ref: '#/components/schemas/Region_hub'
-#           description: Region hub list of the network
-#         towers:
-#           type: array
-#           items:
-#             $ref: '#/components/schemas/Tower'
-#           description: Tower list of the network
+  schemas:
+    Network:
+      type: object
+      required:
+        - id
+        - name
+        - nodes
+        
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: d678d6d6-c2de-11ec-9d64-0242ac120002
+          readOnly: true
+        name:
+          type: string
+          description: Name of the network
+          example: Mobitel
+          minLength: 1
+          maxLength: 50
+        nodes:
+          items:
+            
+            $ref: '#/components/schemas/Network_hub'
+          description: Node details of the network
+      
+        
+    
           
-#     Region_hub:
-#       type: object
-#       required:
-#         - id
-#         - name
-#         - latitude
-#         - longitude
-#       properties:
-#         id:
-#           type: string
-#           description: Unique identifier
-#           example: B
-#           readOnly: true
-#         name:
-#           type: string
-#           description: Name of the region hub
-#           example: M-Region1
-#           minLength: 1
-#           maxLength: 50
-#         latitude:
-#           type: number
-#           description: Latitude of the region hub
-#           example: 9.456
-#         longitude:
-#           type: number
-#           description: Longitude of the region hub
-#           example: 51.852
-#     Tower:
-#       type: object
-#       required:
-#         - id
-#         - name
-#         - radius
-#         - latitude
-#         - longitude
-#       properties:
-#         id:
-#           type: string
-#           description: Unique identifier
-#           example: D
-#           readOnly: true
-#         name:
-#           type: string
-#           description: Name of the tower
-#           example: M-Tower1
-#           minLength: 1
-#           maxLength: 50
-#         radius:
-#           type: number
-#           description: Network coverage radius of the tower
-#           example: 11
-#           minLength: 1
-#           maxLength: 50
-#         latitude:
-#           type: number
-#           description: Latitude of the tower
-#           example: 10.456
-#         longitude:
-#           type: number
-#           description: Longitude of the tower
-#           example: 50.852
+    Network_hub:
+      type: object
+      required:
+        - id
+        - name
+        - latitude
+        - longitude
+        - towers
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: B
+          readOnly: true
+        name:
+          type: string
+          description: Name of the region hub
+          example: M-Region1
+          minLength: 1
+          maxLength: 50
+        node_id:
+          type: string
+          description: Name of the region hub
+          example: B
+          minLength: 1
+          maxLength: 50
+        latitude:
+          type: number
+          description: Latitude of the region hub
+          example: 9.456
+        longitude:
+          type: number
+          description: Longitude of the region hub
+          example: 51.852
+        towers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tower'
+          description: Tower list of the network
+    Tower:
+      type: object
+      required:
+        - id
+        - name
+        - radius
+        - latitude
+        - longitude
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: 4d69680e-e71b-4103-bc12-ebe72792d8e2
+          readOnly: true
+        name:
+          type: string
+          description: Name of the tower
+          example: M-Tower1
+          minLength: 1
+          maxLength: 50
+        node_id:
+          type: string
+          description: Name of the region hub
+          example: C
+          minLength: 1
+          maxLength: 50
+        radius:
+          type: number
+          description: Network coverage radius of the tower
+          example: 11
+          minLength: 1
+          maxLength: 50
+        latitude:
+          type: number
+          description: Latitude of the tower
+          example: 10.456
+        longitude:
+          type: number
+          description: Longitude of the tower
+          example: 50.852
       
    

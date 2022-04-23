@@ -1,4 +1,5 @@
 import imp
+
 from aiohttp import web
 import networkx as nx
 from app import utils
@@ -20,7 +21,7 @@ from aiohttp.web_exceptions import (
     HTTPInternalServerError,
     HTTPNotFound,
 )
-from .queries import add_new_network
+from .queries import add_new_network,get_network_list_with_details
 from .connexion_utils import response
 from http import HTTPStatus
 import json
@@ -50,3 +51,13 @@ async def add_network(request: web.Request):
     
     return response(response_data,HTTPStatus.CREATED)
     
+async def get_all_networks(limit):
+     logging.info("In get_all_networks service method")
+     
+     try:
+        response_data = await get_network_list_with_details(limit)
+     except:
+         return response("Failed to get network details", HTTPStatus.INTERNAL_SERVER_ERROR)
+     
+     return response(response_data,HTTPStatus.OK)
+
