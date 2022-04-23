@@ -4,40 +4,41 @@ info:
   title: Network Coverage Application
 servers:
   - url: /api
-# Paths supported by the server application
 paths:
   /network:
-    get:
+    # get:
+    #   tags:
+    #     - Network
+    #   operationId: app.get_all_cities
+    #   summary: Get all networks
+    #   parameters:
+    #     - name: limit
+    #       in: query
+    #       schema:
+    #         type: integer
+    #         minimum: 0
+    #         default: 100
+    #   responses:
+    #     '200':
+    #       description: Success
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: array
+    #             items:
+    #               $ref: '#/components/schemas/Network'
+    #     '500':
+    #       description: Failure
+    post:
+      operationId: app.api.add_network
+      summary: Add new network details into the database
       tags:
         - Network
-      operationId: app.get_all_cities
-      summary: Get all networks
-      parameters:
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            minimum: 0
-            default: 100
       responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Network'
-        '500':
-          description: Failure
-    post:
-      operationId: app.api.start
-      summary: Liveness check
-      tags:
-        - healthcheck
-      responses:
-        "200": {description: Success}
-        "500": {description: Failure}
+        '201':
+          description: Created
+        '400':
+          description: Bad request
       requestBody:
         content:
           multipart/form-data:
@@ -47,92 +48,158 @@ paths:
                 Graph File:
                   type: string
                   format: binary
+                  
+                  
+  # /network/{longitude}/{latitude}:
+  #   get:
+  #     tags:
+  #       - Network
+  #     operationId: app.get_all_cities
+  #     summary: Get all networks
+  #     parameters:
+  #       - name: limit
+  #         in: query
+  #         schema:
+  #           type: integer
+  #           minimum: 0
+  #           default: 100
+  #     responses:
+  #       '200':
+  #         description: Success
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/Network'
+  #       '500':
+  #         description: Failure
+      
     
-components:
-  # #   parameters:
-  # #     city_id:
-  # #       name: city_id
-  # #       description: Unique identifier of the City
-  # #     in: path
-  # #     required: true
-  # #     schema:
-  # #       type: integer
-  # #   radius:
-  # #     name: radius
-  # #     description: The radius value for find the nearest city
-  # #     in: path
-  # #     required: true
-  # #     schema:
-  # #       type: number
-  # # securitySchemes:
-  # #   jwt:
-  # #     type: http
-  # #     scheme: bearer
-  # #     bearerFormat: JWT
-  # #     x-bearerInfoFunc: app.decode_token
-  schemas:
-    Network:
-      type: object
-      required:
-        - id
-        - center_hub
-        - latitude
-        - longitude
-        - region_hubs
-        - towers
-      properties:
-        id:
-          type: string
-          description: Unique identifier
-          example: A
-          readOnly: true
-        name:
-          type: string
-          description: Name of the center hub
-          example: Mobitel-1
-          minLength: 1
-          maxLength: 50
-        latitude:
-          type: number
-          description: Latitude of the center hub
-          example: 10.456
-        longitude:
-          type: number
-          description: Longitude of the center hub
-          example: 50.852
-        region_hubs:
-          type: array
-          items:
-            $ref: '#/components/schemas/Network'
-          description: Longitude of the center hub
-          example: 50.852
+    
+# components:
+#   parameters:
+#     :
+#       name: city_id
+#       description: Unique identifier of the City
+#     in: path
+#     required: true
+#     schema:
+#       type: integer
+#   radius:
+#     name: radius
+#     description: The radius value for find the nearest city
+#     in: path
+#     required: true
+#     schema:
+#       type: number
+#   # # securitySchemes:
+#   # #   jwt:
+#   # #     type: http
+#   # #     scheme: bearer
+#   # #     bearerFormat: JWT
+#   # #     x-bearerInfoFunc: app.decode_token
+#   schemas:
+#     Network:
+#       type: object
+#       required:
+#         - id
+#         - center_hub
+#         - latitude
+#         - longitude
+#         - region_hubs
+#         - towers
+#       properties:
+#         id:
+#           type: string
+#           description: Unique identifier
+#           example: A
+#           readOnly: true
+#         name:
+#           type: string
+#           description: Name of the center hub
+#           example: Mobitel-1
+#           minLength: 1
+#           maxLength: 50
+#         latitude:
+#           type: number
+#           description: Latitude of the center hub
+#           example: 10.456
+#         longitude:
+#           type: number
+#           description: Longitude of the center hub
+#           example: 50.852
+#         region_hubs:
+#           type: array
+#           items:
+#             $ref: '#/components/schemas/Region_hub'
+#           description: Region hub list of the network
+#         towers:
+#           type: array
+#           items:
+#             $ref: '#/components/schemas/Tower'
+#           description: Tower list of the network
           
-    region_hub:
-      type: object
-      required:
-        - id
-        - name
-        - latitude
-        - longitude
-      properties:
-        id:
-          type: string
-          description: Unique identifier
-          example: A
-          readOnly: true
-        name:
-          type: string
-          description: Name of the center hub
-          example: Mobitel-1
-          minLength: 1
-          maxLength: 50
-        latitude:
-          type: number
-          description: Latitude of the center hub
-          example: 10.456
-        longitude:
-          type: number
-          description: Longitude of the center hub
-          example: 50.852
+#     Region_hub:
+#       type: object
+#       required:
+#         - id
+#         - name
+#         - latitude
+#         - longitude
+#       properties:
+#         id:
+#           type: string
+#           description: Unique identifier
+#           example: B
+#           readOnly: true
+#         name:
+#           type: string
+#           description: Name of the region hub
+#           example: M-Region1
+#           minLength: 1
+#           maxLength: 50
+#         latitude:
+#           type: number
+#           description: Latitude of the region hub
+#           example: 9.456
+#         longitude:
+#           type: number
+#           description: Longitude of the region hub
+#           example: 51.852
+#     Tower:
+#       type: object
+#       required:
+#         - id
+#         - name
+#         - radius
+#         - latitude
+#         - longitude
+#       properties:
+#         id:
+#           type: string
+#           description: Unique identifier
+#           example: D
+#           readOnly: true
+#         name:
+#           type: string
+#           description: Name of the tower
+#           example: M-Tower1
+#           minLength: 1
+#           maxLength: 50
+#         radius:
+#           type: number
+#           description: Network coverage radius of the tower
+#           example: 11
+#           minLength: 1
+#           maxLength: 50
+#         latitude:
+#           type: number
+#           description: Latitude of the tower
+#           example: 10.456
+#         longitude:
+#           type: number
+#           description: Longitude of the tower
+#           example: 50.852
       
    

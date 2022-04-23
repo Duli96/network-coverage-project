@@ -13,9 +13,9 @@ gino = "*"
 python-dotenv = "*"
 marshmallow-sqlalchemy = "*"
 geoalchemy2 = "*"
-alembic = "*"
 psycopg2-binary = "*"
 connexion = {extras = ["swagger-ui"], version = "*"}
 networkx = {extras = [ "default",]}
 aiohttp = "*"
 openapi-spec-validator = "*"
+alembic = "*"
