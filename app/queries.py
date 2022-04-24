@@ -1,7 +1,9 @@
 from asyncio import constants
 from unicodedata import name
+from psycopg2 import DataError
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID, insert
 from numpy import ediff1d
-
+from aiohttp.web_exceptions import HTTPBadRequest, HTTPNotFound
 from sqlalchemy import and_, func
 from app.models import models
 from app import db
@@ -231,7 +233,7 @@ async def get_node_list(network):
         'latitude',
         'longitude',
         'radius',
-    ).where(models.Node.network_id == network['id']).gino.all()
+    ).where(models.Node.network_id == network.id).gino.all()
     print(node_list)
     return node_list
 
@@ -282,3 +284,45 @@ async def get_tower_list(network,location_geo_point):
     tower_list = await query.gino.all()
     return tower_list 
 
+async def calculate_total_cost(network_id,cost_details):
+    network = await get_network_from_db(network_id)
+
+    if(network is None):
+            raise HTTPNotFound(text=f"Network not found for network id:{network_id}")
+    node_list = await get_node_list(network)
+    edge_list = await  models.Edge.select("source_node","target_node").where(models.Edge.network_id == network.id).gino.all()
+    # print(node_list)
+
+    if node_list is None or edge_list is None:
+        raise HTTPNotFound(text=f"Network nodes or edges not found for network id:{network_id}")
+
+    graph = create_graph_by_db_data(node_list,edge_list)
+    print("LENGTH",len(list(filter(lambda node:node.type == 'Region Hub',node_list))))
+    center_hub_total_cost = len(list(filter(lambda node:node.type == 'Center Hub',node_list))) * cost_details['Center Hub']['cost']
+    region_hub_total_cost = len(list(filter(lambda node:node.type == 'Region Hub',node_list))) * cost_details['Region Hub']['cost']
+    tower_total_cost = len(list(filter(lambda node:node.type == 'Tower',node_list))) * cost_details['Tower']['cost']
+    center_region_total_cost = 0
+    region_tower_total_cost = 0
+    for edge in graph.edges(data=True):
+        source_node = list(filter(lambda node:node[0] == edge[0],graph.nodes(data=True)))
+        target_node = list(filter(lambda node:node[0] == edge[1],graph.nodes(data=True)))
+
+        print("SOURCE",source_node[0][1]['type'])
+        print("TARGET",target_node)
+            
+        if(source_node[0][1]['type'] == "Center Hub" and target_node[0][1]['type'] == "Region Hub"):
+            center_region_total_cost += cost_details['Cables']['Center-Region']["cost"]
+        elif(source_node[0][1]['type'] == "Region Hub" and target_node[0][1]['type'] == "Tower"):
+            region_tower_total_cost += cost_details['Cables']['Region-Tower']["cost"]
+    total_cost = center_region_total_cost + region_tower_total_cost + center_hub_total_cost + region_hub_total_cost + tower_total_cost
+    return total_cost
+
+async def get_network_from_db(network_id):
+    try:
+        network = await models.Network.get(network_id)
+
+        return network
+
+    #TODO: find the exception type and put
+    except DataError:
+        raise HTTPBadRequest(text=f"Invalid network id: {network_id} length must be between 32..36 characters")

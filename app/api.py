@@ -1,6 +1,7 @@
 import imp
 
 from aiohttp import web
+from matplotlib.font_manager import json_dump
 import networkx as nx
 from app import utils
 from app.models import models
@@ -21,7 +22,7 @@ from aiohttp.web_exceptions import (
     HTTPInternalServerError,
     HTTPNotFound,
 )
-from .queries import add_new_network,get_network_list_with_details,get_network_coverage_details
+from .queries import add_new_network,get_network_list_with_details,get_network_coverage_details,calculate_total_cost
 from .connexion_utils import response
 from http import HTTPStatus
 import json
@@ -64,4 +65,14 @@ async def get_all_networks(limit):
 async def get_network_coverage(latitude,longitude):
     response_data = await get_network_coverage_details(latitude,longitude)
     return response(response_data,HTTPStatus.OK)
+
+async def get_total_cost_for_network(request: web.Request):
+    form_data = await request.post()
+    file = form_data['Cost File'].file
+    network_id = form_data['Network id']
+    cost_details = json.loads(file.read().decode('utf-8'))
+    total_cost = await calculate_total_cost(network_id,cost_details)
+    return response({"total cost":total_cost},HTTPStatus.OK)
+
+    
 
