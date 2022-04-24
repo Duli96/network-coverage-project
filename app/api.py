@@ -21,7 +21,7 @@ from aiohttp.web_exceptions import (
     HTTPInternalServerError,
     HTTPNotFound,
 )
-from .queries import add_new_network,get_network_list_with_details
+from .queries import add_new_network,get_network_list_with_details,get_network_coverage_details
 from .connexion_utils import response
 from http import HTTPStatus
 import json
@@ -56,8 +56,12 @@ async def get_all_networks(limit):
      
      try:
         response_data = await get_network_list_with_details(limit)
-     except:
-         return response("Failed to get network details", HTTPStatus.INTERNAL_SERVER_ERROR)
+     except Exception as e:
+         return response("Get all networks failed!", HTTPStatus.INTERNAL_SERVER_ERROR)
      
      return response(response_data,HTTPStatus.OK)
+
+async def get_network_coverage(latitude,longitude):
+    response_data = await get_network_coverage_details(latitude,longitude)
+    return response(response_data,HTTPStatus.OK)
 

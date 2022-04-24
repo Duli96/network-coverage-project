@@ -2,9 +2,10 @@ from asyncio import constants
 from unicodedata import name
 from numpy import ediff1d
 
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 from app.models import models
 from app import db
+from geoalchemy2 import func
 from .constants import (
     CENTER_HUB,
     REGION_HUB,
@@ -22,7 +23,9 @@ from .utils import (
     create_graph_by_db_data,
     convert_region_node_to_dict,
     convert_node_to_dict,
-    convert_network_to_dict
+    convert_network_to_dict,
+    convert_tower_data_to_dict,
+    coverage_network_sorting_criteria
     )
 
 
@@ -117,7 +120,7 @@ async def add_new_network(graph):
     return new_network
 
 async def get_network_list_with_details(limit):
-    network_list = await get_network_list(limit)
+    network_list = await get_network_list()
     response_network_list = []
     for network in network_list:
         node_list = await get_node_list(network)
@@ -187,8 +190,9 @@ async def get_network_list_with_details(limit):
         
    
     
-async def get_network_list(limit):
-    network_object_list = await models.Network.query.limit(limit).gino.all()
+async def get_network_list():
+    network_object_list = await models.Network.query.gino.all()
+    print("TOWER",network_object_list)
     network_list = [network.to_dict() for network in network_object_list]
     return network_list
 
@@ -231,6 +235,50 @@ async def get_node_list(network):
     print(node_list)
     return node_list
 
-    
-   
+async def get_network_coverage_details(latitude,longitude):
+    location_geo_point = create_point(latitude,longitude)   
+    network_list = await get_network_list()
+    coverage_network_list = []
+    for network in network_list:
+        tower_list = await get_tower_list(network,location_geo_point)
+        if tower_list:
+            tower_list_dict = [convert_tower_data_to_dict(tower) for tower in tower_list]
+            coverage_network = convert_network_to_dict(network,tower_list_dict)   
+            coverage_network_list.append(coverage_network)
+    return sorted(coverage_network_list, key=lambda tower: (len(tower['nodes']), tower),reverse=True)         
+                            #    list(filter(lambda x:x[1]['node_id'] == neighbor,graph.nodes(data=True)))
+        
+        # list(filter(lambda x: (func.ST_DistanceSphere(x.geo_point,location_geo_point ) < x.radius),all_towers_in_network))
+
+        # for tower in all_towers_in_network:
+        #     distance = func.ST_DistanceSphere(tower.geo_point,location_geo_point)
+        #     print("DISTANCE",distance)
+
+    # data_points =  await models.Node.query.where(
+    #     func.ST_DistanceSphere(
+    #     models.Node.geo_point,
+    #     location_geo_point
+    # ) <= (models.Node.radius)).gino.all()
+    # print(data_points)
+    # .gino.all()
+        
+async def get_tower_list(network,location_geo_point):
+    query = (models.Node.select(
+        'id',
+        'network_id',
+        'node_id',
+        'name',
+        'type',
+        'latitude',
+        'longitude',
+        'radius',
+        'geo_point'
+    ).where(
+       and_(
+        models.Node.network_id == network['id'],
+        models.Node.type == "Tower",
+        func.ST_DistanceSphere(models.Node.geo_point,location_geo_point) < (models.Node.radius)
+        )))
+    tower_list = await query.gino.all()
+    return tower_list 
 

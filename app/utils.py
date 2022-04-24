@@ -74,3 +74,19 @@ def convert_network_to_dict(network,node_list):
                     "nodes":node_list
                 }
     return data
+
+def convert_tower_data_to_dict(tower):
+    data = {
+                    "id":tower.id,
+                    "node_id":tower.node_id,
+                    "name":tower.name,
+                    "type":tower.type,
+                    "latitude":tower.latitude,
+                    "longitude":tower.longitude,
+                    "radius":tower.radius
+                    }
+    return data
+
+def coverage_network_sorting_criteria(tower):
+    print("CRITERIA",len(tower['nodes']))
+    return len(tower['nodes'])
