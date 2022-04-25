@@ -12,10 +12,12 @@ from app import db,logging
 from geoalchemy2 import func
 from .constants import (
     CABLES,
+    CENTER,
     CENTER_REGION,
     COST,
     GEO_POINT,
     NODES,
+    REGION,
     REGION_TOWER,
     SOURCE_NODE,
     TARGET_NODE,
@@ -52,7 +54,7 @@ async def add_new_network(graph):
         if (node[1][TYPE] == TOWER):
             continue
         if (node[1][TYPE] == CENTER_HUB):
-            network_name = node[1][NAME].split("-")[0]
+            network_name = node[1][NAME]
             new_network = models.Network(
                 id = network_id,
                 name = network_name
@@ -127,13 +129,17 @@ async def get_network_list_with_details():
             if(node[1][TYPE] == REGION_HUB):
                 neighbors_list = list(graph.neighbors(node[0]))
                 for neighbor in neighbors_list:
-                    tower = list(filter(lambda node:node[1][NODE_ID] == neighbor,graph.nodes(data=True)))
+                    tower = list(filter(lambda node:node[1]['node_id'] != "C" and  node[1]['node_id'] == neighbor ,graph.nodes(data=True)))
                     towers.append(tower[0][1])
                 node[1][TOWERS] = towers
                 node_data_list.append(node[1])
-            elif(node[1][TYPE] == CENTER_HUB):                
-                node_data_list.append(node[1])
-        network[NODES] = node_data_list
+            elif(node[1][TYPE] == CENTER_HUB):
+                network["latitude"] = node[1]['latitude']
+                network["longitude"] = node[1]['longitude']      
+                network["node_id"] = node[1]['node_id']           
+                # node_data_list.append(node[1])
+                
+        network["regions"] = node_data_list
         response_network_list.append(network)
     return response_network_list
 
@@ -213,8 +219,8 @@ async def calculate_total_cost(network_id,cost_details):
     if node_list is None or edge_list is None:
         raise HTTPNotFound(text=f"Network nodes or edges not found for network id:{network_id}")
     graph = create_graph_by_db_data(node_list,edge_list)
-    center_hub_total_cost = len(list(filter(lambda node:node.type == CENTER_HUB,node_list))) * cost_details[CENTER_HUB][COST]
-    region_hub_total_cost = len(list(filter(lambda node:node.type == REGION_HUB,node_list))) * cost_details[REGION_HUB][COST]
+    center_hub_total_cost = len(list(filter(lambda node:node.type == CENTER_HUB,node_list))) * cost_details[CENTER][COST]
+    region_hub_total_cost = len(list(filter(lambda node:node.type == REGION_HUB,node_list))) * cost_details[REGION][COST]
     tower_total_cost = len(list(filter(lambda node:node.type == TOWER,node_list))) * cost_details[TOWER][COST]
     center_region_total_cost = 0
     region_tower_total_cost = 0

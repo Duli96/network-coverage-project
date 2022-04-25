@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+	<key attr.name="name" attr.type="string" for="node" id="name"/>
+	<key attr.name="type" attr.type="string" for="node" id="type"/>
+	<key attr.name="radius" attr.type="float" for="node" id="radius"/>
+	<key attr.name="latitude" attr.type="float" for="node" id="latitude"/>
+	<key attr.name="longitude" attr.type="float" for="node" id="longitude"/>
+	<graph edgedefault="directed">
+		<node id="A">
+			<data key="type">Center Hub</data>
+			<data key="name">Mobitel-1</data>
+			<data key="latitude">10.456</data>
+			<data key="longitude">50.852</data>
+		</node>
+		<node id="B">
+			<data key="type">Region Hub</data>
+			<data key="name">M-Region1</data>
+			<data key="latitude">9.456</data>
+			<data key="longitude">51.852</data>
+		</node>
+		<node id="C">
+			<data key="type">Region Hub</data>
+			<data key="name">M-Region2</data>
+			<data key="latitude">8.456</data>
+			<data key="longitude">52.852</data>
+		</node>
+		<node id="D">
+			<data key="type">Tower</data>
+			<data key="name">M-Tower1</data>
+			<data key="radius">16093.4</data>
+			<data key="latitude">37.773972</data>
+			<data key="longitude">-122.43129</data>
+		</node>
+		<node id="E">
+			<data key="type">Tower</data>
+			<data key="name">M-Tower2</data>
+			<data key="radius">16093.4</data>
+			<data key="latitude">37.804363</data>
+			<data key="longitude">-122.4111</data>
+		</node>
+		<node id="F">
+			<data key="type">Tower</data>
+			<data key="name">M-Tower3</data>
+			<data key="radius">16093.4</data>
+			<data key="latitude">37.6879</data>
+			<data key="longitude">-122.4702</data>
+		</node>
+		<node id="G">
+			<data key="type">Tower</data>
+			<data key="name">M-Tower4</data>
+			<data key="radius">9</data>
+			<data key="latitude">13.456</data>
+			<data key="longitude">56.852</data>
+		</node>
+		<node id="H">
+			<data key="type">Tower</data>
+			<data key="name">M-Tower5</data>
+			<data key="radius">8</data>
+			<data key="latitude">14.456</data>
+			<data key="longitude">57.852</data>
+		</node>
+		<node id="I">
+			<data key="type">Tower</data>
+			<data key="name">M-Tower6</data>
+			<data key="radius">7</data>
+			<data key="latitude">15.456</data>
+			<data key="longitude">58.852</data>
+		</node>
+
+		<edge source="A" target="B"></edge>
+		<edge source="A" target="C"></edge>
+		<edge source="B" target="D"></edge>
+		<edge source="B" target="E"></edge>
+		<edge source="C" target="F"></edge>
+		<edge source="C" target="G"></edge>
+		<edge source="C" target="H"></edge>
+		<edge source="C" target="I"></edge>
+
+	</graph>
+</graphml>

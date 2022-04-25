@@ -53,10 +53,9 @@ async def get_all_networks():
     """
     logging.info("In get_all_networks method")
 
-    try:
-        response_data = await get_network_list_with_details()
-    except Exception as e:
-        raise HTTPInternalServerError(text=str(e))
+    
+    response_data = await get_network_list_with_details()
+  
     return response(response_data, HTTPStatus.OK)
 
 
@@ -88,12 +87,11 @@ async def get_total_cost_for_network(request: web.Request):
      """
     logging.info("In get_total_cost_for_network method")
 
-    try:
-        form_data = await request.post()
-        file = form_data['Cost File'].file
-        network_id = form_data['Network id']
-        cost_details = json.loads(file.read().decode('utf-8'))
-        total_cost = await calculate_total_cost(network_id, cost_details)
-    except Exception as e:
-        raise HTTPBadRequest(text=str(e))
+    
+    form_data = await request.post()
+    file = form_data['Cost File'].file
+    network_id = form_data['Network id']
+    cost_details = json.loads(file.read().decode('utf-8'))
+    total_cost = await calculate_total_cost(network_id, cost_details)
+    
     return response({"total cost": total_cost}, HTTPStatus.OK)

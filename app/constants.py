@@ -1,6 +1,6 @@
 # Node types
-CENTER_HUB = "Center Hub"
-REGION_HUB = "Region Hub"
+CENTER_HUB = "Central Hub"
+REGION_HUB = "Regional Hub"
 TOWER = "Tower"
 
 # Node attributes
@@ -19,6 +19,8 @@ TOWERS = "towers"
 NODES = "nodes"
 COST = "cost"
 CABLES = 'Cables'
+CENTER = "Center Hub"
+REGION = "Region Hub"
 CENTER_REGION = "Center-Region"
 REGION_TOWER = "Region-Tower"
 SOURCE_NODE = "source_node"
