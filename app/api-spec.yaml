@@ -11,13 +11,6 @@ paths:
         - Network
       operationId: app.api.get_all_networks
       summary: Get all network details
-      parameters:
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            minimum: 0
-            default: 100
       responses:
         '200':
           description: Success
@@ -60,13 +53,11 @@ paths:
         - name: longitude
           in: path
           required: true
-          
           schema:
             type: number
             default: 100.5
             minimum: -99999.99
             maximum: 99999.99
-           
         - name: latitude
           in: path
           required: true
@@ -84,8 +75,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Network'
-        '500':
-          description: Failure
+        '400':
+          description: Bad Request
   /network/cost:
     post:
       operationId: app.api.get_total_cost_for_network
@@ -93,10 +84,12 @@ paths:
       tags:
         - Network
       responses:
-        '201':
+        '200':
           description: Created
         '400':
           description: Bad request
+        '404':
+          description: Not found
       requestBody:
         content:
           multipart/form-data:
@@ -112,35 +105,14 @@ paths:
     
     
 components:
-#   parameters:
-#     :
-#       name: city_id
-#       description: Unique identifier of the City
-#     in: path
-#     required: true
-#     schema:
-#       type: integer
-#   radius:
-#     name: radius
-#     description: The radius value for find the nearest city
-#     in: path
-#     required: true
-#     schema:
-#       type: number
-#   # # securitySchemes:
-#   # #   jwt:
-#   # #     type: http
-#   # #     scheme: bearer
-#   # #     bearerFormat: JWT
-#   # #     x-bearerInfoFunc: app.decode_token
   schemas:
+  
     Network:
       type: object
       required:
         - id
         - name
         - nodes
-        
       properties:
         id:
           type: string
@@ -158,9 +130,6 @@ components:
             
             $ref: '#/components/schemas/Network_hub'
           description: Node details of the network
-      
-        
-    
           
     Network_hub:
       type: object
@@ -201,6 +170,7 @@ components:
           items:
             $ref: '#/components/schemas/Tower'
           description: Tower list of the network
+          
     Tower:
       type: object
       required:
