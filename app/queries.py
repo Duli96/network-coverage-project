@@ -203,9 +203,10 @@ async def get_tower_list(network,location_geo_point):
        and_(
         models.Node.network_id == network[UNIQUE_ID],
         models.Node.type == TOWER,
-        func.ST_DistanceSphere(models.Node.geo_point,location_geo_point) < (models.Node.radius)
+        func.ST_DistanceSphere(location_geo_point,models.Node.geo_point) < (models.Node.radius)
         )))
     tower_list = await query.gino.all()
+    print(tower_list)
     return tower_list 
 
 

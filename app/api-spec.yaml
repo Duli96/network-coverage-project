@@ -55,7 +55,7 @@ paths:
           required: true
           schema:
             type: number
-            default: 100.5
+            default: -2.3302296
             minimum: -99999.99
             maximum: 99999.99
         - name: latitude
@@ -65,7 +65,7 @@ paths:
             type: number
             minimum: -99999.99
             maximum: 99999.99
-            default: 120.5
+            default: 52.8008717
       responses:
         '200':
           description: Success
