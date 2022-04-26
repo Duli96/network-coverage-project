@@ -10,6 +10,7 @@ from sqlalchemy import and_, func
 from app.models import models
 from app import db,logging
 from geoalchemy2 import func
+from gino.loader import ModelLoader
 from geoalchemy2 import Geometry
 from .constants import (
     CABLES,
@@ -118,29 +119,29 @@ async def add_new_network(graph):
 async def get_network_list_with_details():
     logging.info("In get_network_list_with_details query method")
 
-    network_list = await get_network_list()
-    
     response_network_list = []
-    for network in network_list:
-        node_list = await get_node_list(network[UNIQUE_ID])
-        edge_list = await get_edge_list(network[UNIQUE_ID])
-        graph = create_graph_by_db_data(node_list,edge_list)
+    network_nodes_edges_list = await load_networks_with_nodes_and_edges()
+    for network in network_nodes_edges_list:
+        nodes_list = [node.to_dict() for node in network.nodes]
+        edges_list = [edge.to_dict() for edge in network.edges]
+        filtered_edges = [(edge[SOURCE_NODE],edge[TARGET_NODE]) for edge in edges_list]
+        graph = create_graph_by_db_data(nodes_list,filtered_edges)
         node_data_list = []
         for node in graph.nodes(data=True):
             towers = []
             if(node[1][TYPE] == REGION_HUB):
                 neighbors_list = list(graph.neighbors(node[0]))
                 for neighbor in neighbors_list:
-                    tower = list(filter(lambda node:node[1]['node_id'] != "C" and  node[1]['node_id'] == neighbor ,graph.nodes(data=True)))
+                    tower = list(filter(lambda node:node[1]['node_id'] != "C" and  
+                    node[1]['node_id'] == neighbor ,graph.nodes(data=True)))
                     towers.append(tower[0][1])
                 node[1][TOWERS] = towers
                 node_data_list.append(node[1])
             elif(node[1][TYPE] == CENTER_HUB):
+                network = network.to_dict()
                 network["latitude"] = node[1]['latitude']
                 network["longitude"] = node[1]['longitude']      
-                network["node_id"] = node[1]['node_id']           
-                # node_data_list.append(node[1])
-                
+                network["node_id"] = node[1]['node_id']          
         network["regions"] = node_data_list
         response_network_list.append(network)
     return response_network_list
@@ -148,9 +149,10 @@ async def get_network_list_with_details():
 
 # Get network list from the database 
 async def get_network_list():
-    network_object_list = await models.Network.query.gino.all()
-    network_list = [network.to_dict() for network in network_object_list]
-    
+    query = db.select([models.Network])
+    query = query.execution_options(loader=models.Network)
+    network_list = await query.gino.all()
+    network_list = [network.to_dict() for network in network_list]
     return network_list
 
 # Get node list for a particular network
@@ -165,6 +167,7 @@ async def get_node_list(network_id):
         LONGITUDE,
         RADIUS,
     ).where(models.Node.network_id == network_id).gino.all()
+    print(node_list)
     return node_list
 
 # Get edge list for a particular network
@@ -249,4 +252,18 @@ async def get_network_from_db(network_id):
         return network
     except Exception:
         raise HTTPBadRequest(text=f"Invalid network id: {network_id} length must be between 32..36 characters")
+
+# Load all the nodes and edges that belongs to each network from db
+async def load_networks_with_nodes_and_edges():
+    query = models.Node.outerjoin(models.Network).outerjoin(models.Edge).select()
+    network_nodes_edges = await query.gino.load(
+        models.Network.distinct(models.Network.id).load(
+            add_node=models.Node.distinct(models.Node.id),
+            add_edge=models.Edge.distinct(models.Edge.id)
+            )
+            
+        ).all()
+    return network_nodes_edges
+
+
 

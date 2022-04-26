@@ -10,6 +10,28 @@ class Network(db.Model):
     id = db.Column(UUID(),primary_key=True)
     name = db.Column(db.Unicode(),nullable=False)
 
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self._nodes = list()
+        self._edges = list()
+
+    @property
+    def nodes(self):
+        return self._nodes
+
+    @property
+    def edges(self):
+        return self._edges
+
+    @nodes.setter
+    def add_node(self, node):
+        self._nodes.append(node)
+
+    @edges.setter
+    def add_edge(self, edge):
+        self._edges.append(edge)
+
+
 class Node(db.Model):
     __tablename__ = "nodes"
 
