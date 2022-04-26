@@ -17,7 +17,7 @@ test_db_uri1 = "postgresql://user:password@localhost:5432/test_db_tower"
 def config(monkeypatch):
     for key, value in environment.items():
         monkeypatch.setenv(key, value)
-    return Config
+    return Config.from_env()
 
 environment = {
     # "HTTPS": "0",
@@ -67,5 +67,9 @@ async def db(event_loop, alembic_runner):
     finally:
         # pass
         alembic_runner.migrate_down_to("base")
+
+@pytest.fixture
+async def mock_id():
+    return("5aea1cec-2127-4eb5-bd76-4d8d6332e3d3")
         
         

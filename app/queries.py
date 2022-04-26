@@ -121,6 +121,7 @@ async def get_network_list_with_details():
 
     response_network_list = []
     network_nodes_edges_list = await load_networks_with_nodes_and_edges()
+    print(network_nodes_edges_list)
     for network in network_nodes_edges_list:
         nodes_list = [node.to_dict() for node in network.nodes]
         edges_list = [edge.to_dict() for edge in network.edges]

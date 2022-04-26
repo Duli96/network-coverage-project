@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+	<key attr.name="name" attr.type="string" for="node" id="name"/>
+	<key attr.name="type" attr.type="string" for="node" id="type"/>
+	<key attr.name="radius" attr.type="float" for="node" id="radius"/>
+	<key attr.name="latitude" attr.type="float" for="node" id="latitude"/>
+	<key attr.name="longitude" attr.type="float" for="node" id="longitude"/>
+	<graph edgedefault="directed">
+		<node id="C">
+			<data key="type">Central Hub</data>
+			<data key="name">Mobi-London</data>
+			<data key="latitude">51.5072209</data>
+			<data key="longitude">-0.1335897</data>
+		</node>
+		<node id="R1">
+			<data key="type">Regional Hub</data>
+			<data key="name">L-R1</data>
+			<data key="latitude">51.892295</data>
+			<data key="longitude">-0.2098</data>
+		</node>
+		<node id="R2">
+			<data key="type">Regional Hub</data>
+			<data key="name">L-R2</data>
+			<data key="latitude">51.7394832</data>
+			<data key="longitude">0.5152976</data>
+		</node>
+		<node id="R3">
+			<data key="type">Regional Hub</data>
+			<data key="name">L-R3</data>
+			<data key="latitude">51.3111331</data>
+			<data key="longitude">0.417783</data>
+		</node>
+		<node id="R4">
+			<data key="type">Regional Hub</data>
+			<data key="name">L-R4</data>
+			<data key="latitude">51.2338092</data>
+			<data key="longitude">-0.5792263</data>
+		</node>
+		<node id="R5">
+			<data key="type">Regional Hub</data>
+			<data key="name">L-R5</data>
+			<data key="latitude">51.6634452</data>
+			<data key="longitude">-0.9043797</data>
+		</node>
+
+		<node id="R1T1">
+			<data key="type">Tower</data>
+			<data key="name">L-R1T1</data>
+			<data key="radius">10</data>
+			<data key="latitude">51.9117333</data>
+			<data key="longitude">-0.5610153</data>
+		</node>
+		<node id="R1T2">
+			<data key="type">Tower</data>
+			<data key="name">L-R1T2</data>
+			<data key="radius">10</data>
+			<data key="latitude">52.1044681</data>
+			<data key="longitude">-0.2836105</data>
+		</node>
+		<node id="R1T3">
+			<data key="type">Tower</data>
+			<data key="name">L-R1T3</data>
+			<data key="radius">10</data>
+			<data key="latitude">52.0588954</data>
+			<data key="longitude">0.0212601</data>
+		</node>
+		<node id="R1T4">
+			<data key="type">Tower</data>
+			<data key="name">L-R1T4</data>
+			<data key="radius">10</data>
+			<data key="latitude">51.8778346</data>
+			<data key="longitude">0.1448563</data>
+		</node>
+
+		<node id="R2T1">
+			<data key="type">Tower</data>
+			<data key="name">L-R2T1</data>
+			<data key="radius">11</data>
+			<data key="latitude">51.9287057</data>
+			<data key="longitude">0.3599136</data>
+		</node>
+		<node id="R2T2">
+			<data key="type">Tower</data>
+			<data key="name">L-R2T2</data>
+			<data key="radius">12</data>
+			<data key="latitude">51.9287057</data>
+			<data key="longitude">0.7142227</data>
+		</node>
+		<node id="R2T3">
+			<data key="type">Tower</data>
+			<data key="name">L-R2T3</data>
+			<data key="radius">11</data>
+			<data key="latitude">51.593814</data>
+			<data key="longitude">0.5576675</data>
+		</node>
+		<node id="R2T4">
+			<data key="type">Tower</data>
+			<data key="name">L-R2T4</data>
+			<data key="radius">9</data>
+			<data key="latitude">51.678251</data>
+			<data key="longitude">0.1264816</data>
+		</node>
+
+		<node id="R3T1">
+			<data key="type">Tower</data>
+			<data key="name">L-R3T1</data>
+			<data key="radius">15</data>
+			<data key="latitude">51.3037363</data>
+			<data key="longitude">0.8735519</data>
+		</node>
+		<node id="R3T2">
+			<data key="type">Tower</data>
+			<data key="name">L-R3T2</data>
+			<data key="radius">10</data>
+			<data key="latitude">51.1127377</data>
+			<data key="longitude">0.3929001</data>
+		</node>
+		<node id="R3T3">
+			<data key="type">Tower</data>
+			<data key="name">L-R3T3</data>
+			<data key="radius">11</data>
+			<data key="latitude">51.271099</data>
+			<data key="longitude">0.0413376</data>
+		</node>
+		<node id="R3T4">
+			<data key="type">Tower</data>
+			<data key="name">L-R3T4</data>
+			<data key="radius">8</data>
+			<data key="latitude">51.4717077</data>
+			<data key="longitude">0.2638107</data>
+		</node>
+
+		<node id="R4T1">
+			<data key="type">Tower</data>
+			<data key="name">L-R4T1</data>
+			<data key="radius">12</data>
+			<data key="latitude">51.0896016</data>
+			<data key="longitude">-0.2003508</data>
+		</node>
+		<node id="R4T2">
+			<data key="type">Tower</data>
+			<data key="name">L-R4T2</data>
+			<data key="radius">17</data>
+			<data key="latitude">51.0343642</data>
+			<data key="longitude">-0.9117155</data>
+		</node>
+		<node id="R4T3">
+			<data key="type">Tower</data>
+			<data key="name">L-R4T3</data>
+			<data key="radius">16</data>
+			<data key="latitude">51.3459336</data>
+			<data key="longitude">-0.9858732</data>
+		</node>
+		<node id="R4T4">
+			<data key="type">Tower</data>
+			<data key="name">L-R4T4</data>
+			<data key="radius">10</data>
+			<data key="latitude">51.4384803</data>
+			<data key="longitude">-0.5381804</data>
+		</node>
+
+		<node id="R5T1">
+			<data key="type">Tower</data>
+			<data key="name">L-R5T1</data>
+			<data key="radius">20</data>
+			<data key="latitude">51.6144858</data>
+			<data key="longitude">-1.3017302</data>
+		</node>
+		<node id="R5T2">
+			<data key="type">Tower</data>
+			<data key="name">L-R5T2</data>
+			<data key="radius">12</data>
+			<data key="latitude">51.8746761</data>
+			<data key="longitude">-1.2001066</data>
+		</node>
+		<node id="R5T3">
+			<data key="type">Tower</data>
+			<data key="name">L-R5T3</data>
+			<data key="radius">8</data>
+			<data key="latitude">51.8305664</data>
+			<data key="longitude">-0.810092</data>
+		</node>
+		<node id="R5T4">
+			<data key="type">Tower</data>
+			<data key="name">L-R5T4</data>
+			<data key="radius">12</data>
+			<data key="latitude">51.6707321</data>
+			<data key="longitude">-0.4832487</data>
+		</node>
+		
+
+		<edge source="C" target="R1"></edge>
+		<edge source="C" target="R2"></edge>
+		<edge source="C" target="R3"></edge>
+		<edge source="C" target="R4"></edge>
+		<edge source="C" target="R5"></edge>
+
+		<edge source="R1" target="R1T1"></edge>
+		<edge source="R1" target="R1T2"></edge>
+		<edge source="R1" target="R1T3"></edge>
+		<edge source="R1" target="R1T4"></edge>
+
+		<edge source="R2" target="R2T1"></edge>
+		<edge source="R2" target="R2T2"></edge>
+		<edge source="R2" target="R2T3"></edge>
+		<edge source="R2" target="R2T4"></edge>
+
+		<edge source="R3" target="R3T1"></edge>
+		<edge source="R3" target="R3T2"></edge>
+		<edge source="R3" target="R3T3"></edge>
+		<edge source="R3" target="R3T4"></edge>
+
+		<edge source="R4" target="R4T1"></edge>
+		<edge source="R4" target="R4T2"></edge>
+		<edge source="R4" target="R4T3"></edge>
+		<edge source="R4" target="R4T4"></edge>
+		
+		<edge source="R5" target="R5T1"></edge>
+		<edge source="R5" target="R5T2"></edge>
+		<edge source="R5" target="R5T3"></edge>
+		<edge source="R5" target="R5T4"></edge>
+		
+
+	</graph>
+</graphml>
