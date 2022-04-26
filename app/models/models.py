@@ -3,6 +3,7 @@ from geoalchemy2 import Geometry
 import gino
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID, insert
 
+
 class Network(db.Model):
     __tablename__ = "networks"
 

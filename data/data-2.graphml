@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+	<key attr.name="name" attr.type="string" for="node" id="name"/>
+	<key attr.name="type" attr.type="string" for="node" id="type"/>
+	<key attr.name="radius" attr.type="float" for="node" id="radius"/>
+	<key attr.name="latitude" attr.type="float" for="node" id="latitude"/>
+	<key attr.name="longitude" attr.type="float" for="node" id="longitude"/>
+	<graph edgedefault="directed">
+		<node id="C">
+			<data key="type">Central Hub</data>
+			<data key="name">Tele-Birmingham</data>
+			<data key="latitude">52.4865131</data>
+			<data key="longitude">-1.8945747</data>
+		</node>
+		<node id="R1">
+			<data key="type">Regional Hub</data>
+			<data key="name">B-R1</data>
+			<data key="latitude">52.4993288</data>
+			<data key="longitude">-0.6841102</data>
+		</node>
+		<node id="R2">
+			<data key="type">Regional Hub</data>
+			<data key="name">B-R2</data>
+			<data key="latitude">52.1646013</data>
+			<data key="longitude">-1.4373383 </data>
+		</node>
+		<node id="R3">
+			<data key="type">Regional Hub</data>
+			<data key="name">B-R3</data>
+			<data key="latitude">51.9998543</data>
+			<data key="longitude">-2.3967476</data>
+		</node>
+		<node id="R4">
+			<data key="type">Regional Hub</data>
+			<data key="name">B-R4</data>
+			<data key="latitude">52.9699045</data>
+			<data key="longitude">-2.6988717</data>
+		</node>
+
+		<node id="R1T1">
+			<data key="type">Tower</data>
+			<data key="name">B-R1T1</data>
+			<data key="radius">14</data>
+			<data key="latitude">52.7822888</data>
+			<data key="longitude">-0.6044023</data>
+		</node>
+		<node id="R1T2">
+			<data key="type">Tower</data>
+			<data key="name">B-R1T2</data>
+			<data key="radius">16</data>
+			<data key="latitude">52.4888486</data>
+			<data key="longitude">-0.0826761</data>
+		</node>
+		<node id="R1T3">
+			<data key="type">Tower</data>
+			<data key="name">B-R1T3</data>
+			<data key="radius">13</data>
+			<data key="latitude">52.2176254</data>
+			<data key="longitude">-0.5866414</data>
+		</node>
+		<node id="R1T4">
+			<data key="type">Tower</data>
+			<data key="name">B-R1T4</data>
+			<data key="radius">10</data>
+			<data key="latitude">52.6463184</data>
+			<data key="longitude">-1.3007527</data>
+		</node>
+
+		<node id="R2T1">
+			<data key="type">Tower</data>
+			<data key="name">B-R2T1</data>
+			<data key="radius">15</data>
+			<data key="latitude">52.1906935</data>
+			<data key="longitude">-1.042574</data>
+		</node>
+		<node id="R2T2">
+			<data key="type">Tower</data>
+			<data key="name">B-R2T2</data>
+			<data key="radius">25</data>
+			<data key="latitude">51.8831935</data>
+			<data key="longitude">-1.6907674</data>
+		</node>
+		<node id="R2T3">
+			<data key="type">Tower</data>
+			<data key="name">B-R2T3</data>
+			<data key="radius">19</data>
+			<data key="latitude">52.2781624</data>
+			<data key="longitude">-1.9819051</data>
+		</node>
+
+		<node id="R3T1">
+			<data key="type">Tower</data>
+			<data key="name">B-R3T1</data>
+			<data key="radius">16</data>
+			<data key="latitude">51.7692175</data>
+			<data key="longitude">-2.686018</data>
+		</node>
+		<node id="R3T2">
+			<data key="type">Tower</data>
+			<data key="name">B-R3T2</data>
+			<data key="radius">21</data>
+			<data key="latitude">52.2864106</data>
+			<data key="longitude">-2.9070119</data>
+		</node>
+
+		<node id="R4T1">
+			<data key="type">Tower</data>
+			<data key="name">B-R4T1</data>
+			<data key="radius">15</data>
+			<data key="latitude">52.8008717</data>
+			<data key="longitude">-2.3302296</data>
+		</node>
+		<node id="R4T2">
+			<data key="type">Tower</data>
+			<data key="name">B-R4T2</data>
+			<data key="radius">18</data>
+			<data key="latitude">52.83407</data>
+			<data key="longitude">-3.1542042</data>
+		</node>
+		<node id="R4T3">
+			<data key="type">Tower</data>
+			<data key="name">B-R4T3</data>
+			<data key="radius">17</data>
+			<data key="latitude">53.2436248</data>
+			<data key="longitude">-2.4071339</data>
+		</node>
+
+		<edge source="C" target="R1"></edge>
+		<edge source="C" target="R2"></edge>
+		<edge source="C" target="R3"></edge>
+		<edge source="C" target="R4"></edge>
+
+		<edge source="R1" target="R1T1"></edge>
+		<edge source="R1" target="R1T2"></edge>
+		<edge source="R1" target="R1T3"></edge>
+		<edge source="R1" target="R1T4"></edge>
+
+		<edge source="R2" target="R2T1"></edge>
+		<edge source="R2" target="R2T2"></edge>
+		<edge source="R2" target="R2T3"></edge>
+
+		<edge source="R3" target="R3T1"></edge>
+		<edge source="R3" target="R3T2"></edge>
+
+		<edge source="R4" target="R4T1"></edge>
+		<edge source="R4" target="R4T2"></edge>
+		<edge source="R4" target="R4T3"></edge>
+		
+	</graph>
+</graphml>

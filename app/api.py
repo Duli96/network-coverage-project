@@ -53,10 +53,10 @@ async def get_all_networks():
     """
     logging.info("In get_all_networks method")
 
-    try:
-        response_data = await get_network_list_with_details()
-    except Exception as e:
-        raise HTTPInternalServerError(text=str(e))
+    # try:
+    response_data = await get_network_list_with_details()
+    # except Exception as e:
+        # raise HTTPInternalServerError(text=str(e))
     return response(response_data, HTTPStatus.OK)
 
 

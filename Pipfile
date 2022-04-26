@@ -19,3 +19,6 @@ networkx = {extras = [ "default",]}
 aiohttp = "*"
 openapi-spec-validator = "*"
 alembic = "*"
+pytest = "*"
+pytest-aiohttp = "*"
+pytest-alembic = "*"

@@ -10,6 +10,7 @@ from sqlalchemy import and_, func
 from app.models import models
 from app import db,logging
 from geoalchemy2 import func
+from geoalchemy2 import Geometry
 from .constants import (
     CABLES,
     CENTER,
@@ -118,6 +119,7 @@ async def get_network_list_with_details():
     logging.info("In get_network_list_with_details query method")
 
     network_list = await get_network_list()
+    
     response_network_list = []
     for network in network_list:
         node_list = await get_node_list(network[UNIQUE_ID])
@@ -148,6 +150,7 @@ async def get_network_list_with_details():
 async def get_network_list():
     network_object_list = await models.Network.query.gino.all()
     network_list = [network.to_dict() for network in network_object_list]
+    
     return network_list
 
 # Get node list for a particular network
@@ -182,13 +185,14 @@ async def get_network_coverage_details(latitude,longitude):
         tower_list = await get_tower_list(network,location_geo_point)
         if tower_list:
             tower_list_dict = [convert_tower_data_to_dict(tower) for tower in tower_list]
-            network[NODES] = tower_list_dict   
+            network["towers"] = tower_list_dict   
             coverage_network_list.append(network)
-    return sorted(coverage_network_list, key=lambda x:len(x[NODES]),reverse=True)     
+    return sorted(coverage_network_list, key=lambda x:len(x["towers"]),reverse=True)     
     
                            
 # get tower list for a particular network and a given location
 async def get_tower_list(network,location_geo_point):
+    
     query = (models.Node.select(
         UNIQUE_ID,
         NETWORK_ID,
@@ -200,11 +204,13 @@ async def get_tower_list(network,location_geo_point):
         RADIUS,
         GEO_POINT
     ).where(
-       and_(
+   
+          and_(
         models.Node.network_id == network[UNIQUE_ID],
         models.Node.type == TOWER,
-        func.ST_DistanceSphere(location_geo_point,models.Node.geo_point) < (models.Node.radius)
-        )))
+        func.ST_DistanceSphere(location_geo_point,models.Node.geo_point)/1000 < (models.Node.radius)
+        ))
+         )
     tower_list = await query.gino.all()
     print(tower_list)
     return tower_list 
@@ -243,3 +249,4 @@ async def get_network_from_db(network_id):
         return network
     except Exception:
         raise HTTPBadRequest(text=f"Invalid network id: {network_id} length must be between 32..36 characters")
+
