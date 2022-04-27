@@ -54,9 +54,9 @@ async def test_get_network_coverage_wrong_params(test_client, db):
 
 @mock.patch('app.queries.create_graph_by_db_data')
 @mock.patch('app.queries.get_network_from_db')
-async def test_get_total_cost_for_network(get_network, create_graph, test_client, graph, db):
+async def test_get_total_cost_for_network(get_network, create_graph, test_client, graph_one, db):
     get_network.return_value = models.Network()
-    create_graph.return_value = graph
+    create_graph.return_value = graph_one
     data = {
         'Cost File': (resources/'test_data/rate-card-1.json').open("rb"),
         'Network id': 'c8b60c12-94c7-4243-a74f-c6ced3b16841'

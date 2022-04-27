@@ -10,6 +10,7 @@ from app.models.models import db as database,Node
 from dotenv import load_dotenv
 from app.config import Config
 import networkx as nx
+from test_data import test_data_list
 
 
 test_db_uri1 = "postgresql://user:password@localhost:5432/test_db_tower"
@@ -74,13 +75,29 @@ async def db(event_loop, alembic_runner):
 
 
 @pytest.fixture
-async def graph():
+async def graph_one():
     content = open(resources/'test_data/data-1.graphml', "r")
     graph = nx.parse_graphml(content.read())
     return graph
 
-async def test_node_list():
-    pass
+@pytest.fixture
+async def graph_two():
+    # content = open(resources/'test_data/data.graphml', "r")
+    # graph = nx.parse_graphml(content.read())
+    graph = nx.DiGraph()
+    graph.add_nodes_from(test_data_list.node_list)
+    graph.add_edges_from(test_data_list.edge_list)
+    return graph
+
+@pytest.fixture
+def test_node_list():
+    test_node_list = test_data_list.node_list
+    return test_node_list
+
+@pytest.fixture
+def test_edge_list():
+    test_edge_list = test_data_list.edge_list
+    return test_edge_list
 
 
 @pytest.fixture

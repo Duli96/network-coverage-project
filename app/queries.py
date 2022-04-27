@@ -182,6 +182,16 @@ async def calculate_total_cost(network_id, cost_details):
             text=f"Network not found for network id:{network_id}")
     node_list = await get_node_list(network_id)
     edge_list = await get_edge_list(network_id)
+    print("--------------",[{"id": node.id,
+            "network_id":node.network_id,
+            "node_id":node.node_id,
+            "name":node.name,
+            "type":node.type,
+            "latitude":node.latitude,
+            "longitude":node.longitude,
+            "radius":node.radius
+         } for node in node_list])
+    print("--------------",[edge for edge in edge_list])
     if node_list is None or edge_list is None:
         raise HTTPNotFound(
             text=f"Network nodes or edges not found for network id:{network_id}")

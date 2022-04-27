@@ -1,4 +1,5 @@
 from pathlib import Path
+from platform import node
 from uuid import UUID
 import uuid
 import pytest
@@ -9,6 +10,7 @@ from app.utils import (
     create_graph_by_db_data,
     convert_tower_data_to_dict
 )
+
 
 resources = Path(__file__).parent
 
@@ -22,21 +24,22 @@ def test_create_point():
     response = create_point(longitude,latitude)
     assert response == 'POINT(-2.3302296 52.8008717)'
 
-def test_create_graph_by_graphml(graph):
+def test_create_graph_by_graphml(graph_one):
     content = open(resources/'test_data/data-1.graphml', "r")
     response = create_graph_by_graphml(content.read())
-    assert response.nodes == graph.nodes 
-    assert response.edges == graph.edges
+    assert response.nodes == graph_one.nodes 
+    assert response.edges == graph_one.edges
 
-def test_create_graph_by_db_data(graph):
-    pass
-    # node_list = [node[1] for node in graph.nodes(data=True)]
-    # edge_list = [edge[1] for edge in graph.edges(data=True)]
-    # print(node_list)
-    # response = create_graph_by_db_data(node_list,edge_list)
+# def test_create_graph_by_db_data(graph_two,test_node_list,test_edge_list):
+#     pass
+#     node_list = test_node_list
+#     edge_list = [edge for edge in graph_two.edges]
     
-    # assert response.nodes == graph.nodes 
-    # assert response.edges == graph.edges
+#     response = create_graph_by_db_data(node_list,edge_list)
+
+#     print("--------------------------------",graph_two.edges (data=True))
+#     assert response.nodes(data=False) == graph_two.nodes(data=False) 
+#     assert response.edges == graph_two.edges
     
 def test_convert_tower_to_dict(test_tower_data):
     test_data = {
