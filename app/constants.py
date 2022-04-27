@@ -4,7 +4,7 @@ REGION_HUB = "Regional Hub"
 TOWER = "Tower"
 
 # Node attributes
-UNIQUE_ID = 'id'
+UNIQUE_ID = "id"
 NETWORK_ID = "network_id"
 NODE_ID = "node_id"
 NAME = "name"
@@ -19,7 +19,7 @@ TOWERS = "towers"
 REGIONS = "regions"
 NODES = "nodes"
 COST = "cost"
-CABLES = 'Cables'
+CABLES = "Cables"
 TOWER_COUNT = "tower_count"
 CENTER_REGION = "Central-Regional"
 REGION_TOWER = "Regional-Tower"

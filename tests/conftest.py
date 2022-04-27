@@ -6,7 +6,7 @@ import gino
 from sqlalchemy import create_engine
 from app import create_app
 from app import db as _db
-from app.models.models import db as database,Node
+from app.models.models import db as database, Node
 from dotenv import load_dotenv
 from app.config import Config
 import networkx as nx
@@ -76,9 +76,10 @@ async def db(event_loop, alembic_runner):
 
 @pytest.fixture
 async def graph_one():
-    content = open(resources/'test_data/data-1.graphml', "r")
+    content = open(resources / "test_data/data-1.graphml", "r")
     graph = nx.parse_graphml(content.read())
     return graph
+
 
 @pytest.fixture
 async def graph_two():
@@ -89,10 +90,12 @@ async def graph_two():
     graph.add_edges_from(test_data_list.edge_list)
     return graph
 
+
 @pytest.fixture
 def test_node_list():
     test_node_list = test_data_list.node_list
     return test_node_list
+
 
 @pytest.fixture
 def test_edge_list():
@@ -103,7 +106,7 @@ def test_edge_list():
 @pytest.fixture
 async def test_tower_data():
     tower = Node()
-    tower.id = 'c8b60c12-94c7-4243-a74f-c6ced3b16841'
+    tower.id = "c8b60c12-94c7-4243-a74f-c6ced3b16841"
     tower.node_id = "R4T1"
     tower.name = "B-R4T1"
     tower.type = "Tower"

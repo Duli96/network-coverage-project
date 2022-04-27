@@ -37,17 +37,17 @@ def create_app(test_db_uri: str | None = None) -> Any:
     )
 
     async def on_startup(app: web.Application):
-        
+
         if test_db_uri:
             uri = test_db_uri
         else:
             uri = config.SQLALCHEMY_DATABASE_URI
 
         app["engine"] = await gino.create_engine(uri)
-       
+
         from .models.models import db
+
         db.bind = app["engine"]
-      
 
     connexion_app.app.on_startup.append(on_startup)
 

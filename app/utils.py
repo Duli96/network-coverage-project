@@ -8,7 +8,7 @@ def generate_id():
 
 # Create point of a location using longitude and latitude
 def create_point(longitude, latitude):
-    point = 'POINT({} {})'.format(longitude, latitude)
+    point = "POINT({} {})".format(longitude, latitude)
     return point
 
 
@@ -21,17 +21,24 @@ def create_graph_by_graphml(content):
 # Create a networkx graph using the db data
 def create_graph_by_db_data(node_list, edge_list):
     graph = nx.DiGraph()
-    graph.add_nodes_from([(
-        node['node_id'],
-        {"id": node['id'],
-            "network_id":node['network_id'],
-            "node_id":node['node_id'],
-            "name":node['name'],
-            "type":node['type'],
-            "latitude":node['latitude'],
-            "longitude":node['longitude'],
-            "radius":node['radius']
-         })for node in node_list])
+    graph.add_nodes_from(
+        [
+            (
+                node["node_id"],
+                {
+                    "id": node["id"],
+                    "network_id": node["network_id"],
+                    "node_id": node["node_id"],
+                    "name": node["name"],
+                    "type": node["type"],
+                    "latitude": node["latitude"],
+                    "longitude": node["longitude"],
+                    "radius": node["radius"],
+                },
+            )
+            for node in node_list
+        ]
+    )
     graph.add_edges_from(edge_list)
     return graph
 
@@ -45,6 +52,6 @@ def convert_tower_data_to_dict(tower):
         "type": tower.type,
         "latitude": tower.latitude,
         "longitude": tower.longitude,
-        "radius": tower.radius
+        "radius": tower.radius,
     }
     return data
