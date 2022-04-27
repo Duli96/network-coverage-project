@@ -39,7 +39,6 @@ async def test_get_network_coverage(test_client, db):
     latitude = 51.67787236789842
     response = await test_client.get(f"/api/network/{latitude}/{longitude}")
     response_text = await response.text()
-    print(response_text)
     assert response.status == 200
 
 
@@ -97,7 +96,6 @@ async def test_get_total_cost_for_network_with_wrong_file(test_client, db):
     }
     response = await test_client.post("/api/network/cost", data=data)
     response_text = await response.text()
-    print(response_text)
     assert json.loads(response_text)[
         "detail"] == "File extension must be .json"
     assert response.status == 400

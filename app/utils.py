@@ -2,8 +2,6 @@ import networkx as nx
 import uuid
 
 # Generate a unique UUID
-
-
 def generate_id():
     return uuid.uuid4()
 
