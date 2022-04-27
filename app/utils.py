@@ -20,7 +20,6 @@ def create_graph_by_graphml(content):
 
 # Create a networkx graph using the db data
 def create_graph_by_db_data(node_list, edge_list):
-    print("MYNODE",node_list)
     graph = nx.DiGraph()
     graph.add_nodes_from([(
         node['node_id'],

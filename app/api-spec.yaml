@@ -85,7 +85,13 @@ paths:
         - Network
       responses:
         '200':
-          description: Created
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cost'
         '400':
           description: Bad request
         '404':
@@ -112,7 +118,10 @@ components:
       required:
         - id
         - name
-        - nodes
+        - latitude
+        - longitude
+        - node_id
+        - regions
       properties:
         id:
           type: string
@@ -125,13 +134,25 @@ components:
           example: Mobitel
           minLength: 1
           maxLength: 50
-        nodes:
+        regions:
           items:
-            
-            $ref: '#/components/schemas/Network_hub'
+            $ref: '#/components/schemas/Region_hub'
           description: Node details of the network
+        node_id:
+          type: string
+          description: Id of the node
+          example: L-R5
+          readOnly: true
+        latitude:
+          type: number
+          description: Latitude of the central hub
+          example: 9.456
+        longitude:
+          type: number
+          description: Longitude of the central hub
+          example: 51.852
           
-    Network_hub:
+    Region_hub:
       type: object
       required:
         - id
@@ -211,5 +232,20 @@ components:
           type: number
           description: Longitude of the tower
           example: 50.852
+          
+    Cost:
+      type: object
+      required:
+        - total_cost
+        
+      properties:
+        total_cost:
+          type: number
+          description: Total cost to implement a given network
+          example: 4500
+          readOnly: true
+      
+          
+          
       
    
