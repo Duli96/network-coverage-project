@@ -1,17 +1,12 @@
-from lib2to3.pgen2.parse import ParseError
-import uuid
-from xml.etree.ElementTree import XMLParser
+
 from aiohttp import web
-from app import db, logging
+from app import logging
 from .utils import (
     create_graph_by_graphml
 )
 from aiohttp.web_exceptions import (
     HTTPBadRequest,
-    HTTPConflict,
-    HTTPForbidden,
     HTTPInternalServerError,
-    HTTPNotFound,
 )
 from .queries import (
     add_new_network,
@@ -34,7 +29,6 @@ async def add_network(request: web.Request):
     """
     logging.info("In add_network method")
 
-    
     form_data = await request.post()
     if (form_data['Graph File'].filename.endswith(".graphml")):
         graph_ml_file = form_data['Graph File'].file

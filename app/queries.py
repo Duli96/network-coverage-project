@@ -2,27 +2,22 @@ from asyncio import constants
 import logging
 from typing import Type
 from unicodedata import name
-from psycopg2 import DataError
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID, insert
 from numpy import ediff1d
 from aiohttp.web_exceptions import HTTPBadRequest, HTTPNotFound
 from sqlalchemy import and_, func, or_
 from app.models import models
 from app import db, logging
 from geoalchemy2 import func
-from gino.loader import ModelLoader
-from geoalchemy2 import Geometry
 from .constants import (
     CABLES,
-    CENTER,
     CENTER_REGION,
     COST,
     GEO_POINT,
-    NODES,
-    REGION,
     REGION_TOWER,
+    REGIONS,
     SOURCE_NODE,
     TARGET_NODE,
+    TOWER_COUNT,
     TOWERS,
     UNIQUE_ID,
     CENTER_HUB,
@@ -123,7 +118,6 @@ async def get_network_list_with_details():
 
     response_network_list = []
     network_nodes_edges_list = await load_networks_with_nodes_and_edges()
-    print(network_nodes_edges_list)
     for network in network_nodes_edges_list:
         nodes_list = [node.to_dict() for node in network.nodes]
         edges_list = [edge.to_dict() for edge in network.edges]
@@ -136,71 +130,63 @@ async def get_network_list_with_details():
             if(node[1][TYPE] == REGION_HUB):
                 neighbors_list = list(graph.neighbors(node[0]))
                 for neighbor in neighbors_list:
-                    tower = list(filter(lambda node: node[1]['node_id'] != "C" and
-                                        node[1]['node_id'] == neighbor, graph.nodes(data=True)))
+                    tower = list(filter(lambda node: node[1][TYPE] != CENTER_HUB and
+                                        node[1][NODE_ID] == neighbor, graph.nodes(data=True)))
                     towers.append(tower[0][1])
                 node[1][TOWERS] = towers
                 node_data_list.append(node[1])
             elif(node[1][TYPE] == CENTER_HUB):
                 network = network.to_dict()
-                network["latitude"] = node[1]['latitude']
-                network["longitude"] = node[1]['longitude']
-                network["node_id"] = node[1]['node_id']
-        network["regions"] = node_data_list
+                network[LATITUDE] = node[1][LATITUDE]
+                network[LONGITUDE] = node[1][LONGITUDE]
+                network[NODE_ID] = node[1][NODE_ID]
+        network[REGIONS] = node_data_list
         response_network_list.append(network)
     return response_network_list
 
+
 # Execute queries to find network coverage
-
-
 async def get_network_coverage_details(latitude, longitude):
+    logging.info("In get_network_coverage_details query method")
+
     location_geo_point = create_point(longitude, latitude)
     node_list = await load_networks_with_tower_nodes(location_geo_point)
     coverage_network_list = []
     for network in node_list:
         tower_list = list(
-            filter(lambda node: node.type == "Tower", network.nodes))
+            filter(lambda node: node.type == TOWER, network.nodes))
         central_hub = list(
-            filter(lambda node: node.type == "Tower", network.nodes))
+            filter(lambda node: node.type == TOWER, network.nodes))
         if tower_list:
-            print(tower_list[0])
             tower_list_dict = [convert_tower_data_to_dict(
                 tower) for tower in tower_list]
             network = network.to_dict()
-            network["latitude"] = central_hub[0].latitude
-            network["longitude"] = central_hub[0].longitude
-            network["towers"] = tower_list_dict
-            network["tower_count"] = len(tower_list_dict)
+            network[LATITUDE] = central_hub[0].latitude
+            network[LONGITUDE] = central_hub[0].longitude
+            network[TOWERS] = tower_list_dict
+            network[TOWER_COUNT] = len(tower_list_dict)
             coverage_network_list.append(network)
-    return sorted(coverage_network_list, key=lambda x: len(x["towers"]), reverse=True)
+    return sorted(coverage_network_list, key=lambda x: len(x[TOWERS]), reverse=True)
 
 # Execute queries to calculate total cost
 async def calculate_total_cost(network_id, cost_details):
+    logging.info("In calculate_total_cost query method")
+    
     network = await get_network_from_db(network_id)
     if(network is None):
         raise HTTPNotFound(
             text=f"Network not found for network id:{network_id}")
     node_list = await get_node_list(network_id)
     edge_list = await get_edge_list(network_id)
-    print("--------------",[{"id": node.id,
-            "network_id":node.network_id,
-            "node_id":node.node_id,
-            "name":node.name,
-            "type":node.type,
-            "latitude":node.latitude,
-            "longitude":node.longitude,
-            "radius":node.radius
-         } for node in node_list])
-    print("--------------",[edge for edge in edge_list])
     if node_list is None or edge_list is None:
         raise HTTPNotFound(
             text=f"Network nodes or edges not found for network id:{network_id}")
     graph = create_graph_by_db_data(node_list, edge_list)
-    center_hub_total_cost = len(list(filter(lambda node: node[1]["type"] == CENTER_HUB, graph.nodes(
+    center_hub_total_cost = len(list(filter(lambda node: node[1][TYPE] == CENTER_HUB, graph.nodes(
         data=True)))) * cost_details[CENTER_HUB][COST]
-    region_hub_total_cost = len(list(filter(lambda node: node[1]['type'] == REGION_HUB, graph.nodes(
+    region_hub_total_cost = len(list(filter(lambda node: node[1][TYPE] == REGION_HUB, graph.nodes(
         data=True)))) * cost_details[REGION_HUB][COST]
-    tower_total_cost = len(list(filter(lambda node: node[1]['type'] == TOWER, graph.nodes(
+    tower_total_cost = len(list(filter(lambda node: node[1][TYPE] == TOWER, graph.nodes(
         data=True)))) * cost_details[TOWER][COST]
     center_region_total_cost = 0
     region_tower_total_cost = 0
@@ -218,17 +204,7 @@ async def calculate_total_cost(network_id, cost_details):
     return total_cost
 
 
-# Get network list from the database
-async def get_network_list():
-    query = db.select([models.Network])
-    query = query.execution_options(loader=models.Network)
-    network_list = await query.gino.all()
-    network_list = [network.to_dict() for network in network_list]
-    return network_list
-
 # Get node list for a particular network
-
-
 async def get_node_list(network_id):
     node_list = await models.Node.select(
         UNIQUE_ID,
@@ -240,46 +216,16 @@ async def get_node_list(network_id):
         LONGITUDE,
         RADIUS,
     ).where(models.Node.network_id == network_id).gino.all()
-    print(node_list)
     return node_list
 
+
 # Get edge list for a particular network
-
-
 async def get_edge_list(network_id):
     edge_list = await models.Edge.select(
         SOURCE_NODE,
         TARGET_NODE
     ).where(models.Edge.network_id == network_id).gino.all()
     return edge_list
-
-
-# get tower list for a particular network and a given location
-async def get_tower_list(network, location_geo_point):
-    query = (models.Node.select(
-        UNIQUE_ID,
-        NETWORK_ID,
-        NODE_ID,
-        NAME,
-        TYPE,
-        LATITUDE,
-        LONGITUDE,
-        RADIUS,
-        GEO_POINT
-    ).where(
-
-        and_(
-            models.Node.network_id == network[UNIQUE_ID],
-            models.Node.type == TOWER,
-            func.ST_DistanceSphere(
-                location_geo_point, models.Node.geo_point)/1000 < (models.Node.radius)
-        ))
-    )
-    tower_list = await query.gino.all()
-    print(tower_list)
-    return tower_list
-
-
 
 
 # get network data from db using network id
@@ -292,7 +238,6 @@ async def get_network_from_db(network_id):
             text=f"Invalid network id: {network_id} length must be between 32..36 characters")
 
 
-
 # Load all the nodes and edges that belongs to each network from db
 async def load_networks_with_nodes_and_edges():
     query = models.Node.outerjoin(
@@ -302,10 +247,8 @@ async def load_networks_with_nodes_and_edges():
             add_node=models.Node.distinct(models.Node.id),
             add_edge=models.Edge.distinct(models.Edge.id)
         )
-
     ).all()
     return network_nodes_edges
-
 
 
 # Load all the nodes and edges that belongs to each network from db
@@ -314,13 +257,12 @@ async def load_networks_with_tower_nodes(location_geo_point):
         or_(
             func.ST_DistanceSphere(
                 location_geo_point, models.Node.geo_point)/1000 < (models.Node.radius),
-            models.Node.type == "Central Hub"
+            models.Node.type == CENTER_HUB
         )
     )
     network_nodes = await query.gino.load(
         models.Network.distinct(models.Network.id).load(
             add_node=models.Node.distinct(models.Node.id)
         )
-
     ).all()
     return network_nodes

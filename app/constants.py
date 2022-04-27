@@ -16,11 +16,11 @@ GEO_POINT = "geo_point"
 
 # Dict keys
 TOWERS = "towers"
+REGIONS = "regions"
 NODES = "nodes"
 COST = "cost"
 CABLES = 'Cables'
-CENTER = "Center Hub"
-REGION = "Region Hub"
+TOWER_COUNT = "tower_count"
 CENTER_REGION = "Central-Regional"
 REGION_TOWER = "Regional-Tower"
 SOURCE_NODE = "source_node"
