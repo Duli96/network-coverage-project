@@ -43,7 +43,7 @@ paths:
                   format: binary
                   
                   
-  /network/{longitude}/{latitude}:
+  /network/{latitude}/{longitude}:
     get:
       tags:
         - Network

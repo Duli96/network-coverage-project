@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import pytest
 import gino
 from sqlalchemy import create_engine
@@ -7,10 +8,11 @@ from app import db as _db
 from app.models.models import db as database
 from dotenv import load_dotenv
 from app.config import Config
+import networkx as nx
 
 
 test_db_uri1 = "postgresql://user:password@localhost:5432/test_db_tower"
-
+resources = Path(__file__).parent
 
 
 @pytest.fixture
@@ -69,7 +71,11 @@ async def db(event_loop, alembic_runner):
         alembic_runner.migrate_down_to("base")
 
 @pytest.fixture
-async def mock_id():
-    return("5aea1cec-2127-4eb5-bd76-4d8d6332e3d3")
+async def graph():
+    content = open(resources/'test_data/data-1.graphml', "r")
+    
+    graph = nx.parse_graphml(content.read())
+    return graph
+    
         
         

@@ -1,0 +1,9 @@
+{
+  "Central Hub": { "cost": 1200 },
+  "Regional Hub": { "cost": 200 },
+  "Tower": { "cost": 200 },
+  "Cables": {
+    "Central-Regional": { "cost": 80 },
+    "Regional-Tower": { "cost": 40 }
+  }
+}

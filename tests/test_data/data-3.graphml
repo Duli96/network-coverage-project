@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+	<key attr.name="name" attr.type="string" for="node" id="name"/>
+	<key attr.name="type" attr.type="string" for="node" id="type"/>
+	<key attr.name="radius" attr.type="float" for="node" id="radius"/>
+	<key attr.name="latitude" attr.type="float" for="node" id="latitude"/>
+	<key attr.name="longitude" attr.type="float" for="node" id="longitude"/>
+	<graph edgedefault="directed">
+		<node id="C">
+			<data key="type">Central Hub</data>
+			<data key="name">FIber-Yeovil</data>
+			<data key="latitude">50.9656347</data>
+			<data key="longitude">-2.651602</data>
+		</node>
+		<node id="R1">
+			<data key="type">Regional Hub</data>
+			<data key="name">F-R1</data>
+			<data key="latitude">51.4573473</data>
+			<data key="longitude">-2.5972621</data>
+		</node>
+		<node id="R2">
+			<data key="type">Regional Hub</data>
+			<data key="name">F-R2</data>
+			<data key="latitude">51.2068004</data>
+			<data key="longitude">-1.5975063</data>
+		</node>
+		<node id="R3">
+			<data key="type">Regional Hub</data>
+			<data key="name">F-R3</data>
+			<data key="latitude">50.7305844</data>
+			<data key="longitude">-3.5295762</data>
+		</node>
+
+		<node id="R1T1">
+			<data key="type">Tower</data>
+			<data key="name">F-R1T1</data>
+			<data key="radius">25</data>
+			<data key="latitude">51.6765491</data>
+			<data key="longitude">-2.153641</data>
+		</node>
+		<node id="R1T2">
+			<data key="type">Tower</data>
+			<data key="name">F-R1T2</data>
+			<data key="radius">15</data>
+			<data key="latitude">51.3243386</data>
+			<data key="longitude">-2.7908481</data>
+		</node>
+		<node id="R1T3">
+			<data key="type">Tower</data>
+			<data key="name">F-R1T3</data>
+			<data key="radius">12</data>
+			<data key="latitude">51.3277712</data>
+			<data key="longitude">-2.2689975</data>
+		</node>
+
+		<node id="R2T1">
+			<data key="type">Tower</data>
+			<data key="name">F-R2T1</data>
+			<data key="radius">19</data>
+			<data key="latitude">51.5503401</data>
+			<data key="longitude">-1.6317904</data>
+		</node>
+		<node id="R2T2">
+			<data key="type">Tower</data>
+			<data key="name">F-R2T2</data>
+			<data key="radius">16</data>
+			<data key="latitude">51.076515</data>
+			<data key="longitude">-1.2912143</data>
+		</node>
+		<node id="R2T3">
+			<data key="type">Tower</data>
+			<data key="name">F-R2T3</data>
+			<data key="radius">18</data>
+			<data key="latitude">50.9936107</data>
+			<data key="longitude">-1.9339145</data>
+		</node>
+
+		<node id="R3T1">
+			<data key="type">Tower</data>
+			<data key="name">F-R3T1</data>
+			<data key="radius">14</data>
+			<data key="latitude">51.1097916</data>
+			<data key="longitude">-3.6533626</data>
+		</node>
+		<node id="R3T2">
+			<data key="type">Tower</data>
+			<data key="name">F-R3T2</data>
+			<data key="radius">16</data>
+			<data key="latitude">50.9197196</data>
+			<data key="longitude">-3.0491146</data>
+		</node>
+		<node id="R3T3">
+			<data key="type">Tower</data>
+			<data key="name">F-R3T3</data>
+			<data key="radius">12</data>
+			<data key="latitude">50.8365348</data>
+			<data key="longitude">-4.2301449</data>
+		</node>
+		<node id="R3T4">
+			<data key="type">Tower</data>
+			<data key="name">F-R3T4</data>
+			<data key="radius">15</data>
+			<data key="latitude">50.4848368</data>
+			<data key="longitude">-3.7851986</data>
+		</node>
+
+		<edge source="C" target="R1"></edge>
+		<edge source="C" target="R2"></edge>
+		<edge source="C" target="R3"></edge>
+
+		<edge source="R1" target="R1T1"></edge>
+		<edge source="R1" target="R1T2"></edge>
+		<edge source="R1" target="R1T3"></edge>
+
+		<edge source="R2" target="R2T1"></edge>
+		<edge source="R2" target="R2T2"></edge>
+		<edge source="R2" target="R2T3"></edge>
+
+		<edge source="R3" target="R3T1"></edge>
+		<edge source="R3" target="R3T2"></edge>
+		<edge source="R3" target="R3T3"></edge>
+		<edge source="R3" target="R3T4"></edge>
+		
+	</graph>
+</graphml>

@@ -34,15 +34,17 @@ async def add_network(request: web.Request):
     """
     logging.info("In add_network method")
 
-    try:
-        form_data = await request.post()
+    
+    form_data = await request.post()
+    if (form_data['Graph File'].filename.endswith(".graphml")):
         graph_ml_file = form_data['Graph File'].file
         content = graph_ml_file.read()
         graph = create_graph_by_graphml(content)
         saved_network = await add_new_network(graph)
-    except Exception as e:
-        raise HTTPBadRequest(text=str(e))
-    return response(saved_network.to_dict(), HTTPStatus.CREATED)
+        return response(saved_network.to_dict(), HTTPStatus.CREATED)
+    else:
+        raise HTTPBadRequest(text=str("File extension must be .graphml"))
+
 
 
 async def get_all_networks():
@@ -54,11 +56,12 @@ async def get_all_networks():
     """
     logging.info("In get_all_networks method")
 
-    # try:
-    response_data = await get_network_list_with_details()
-    # except Exception as e:
-        # raise HTTPInternalServerError(text=str(e))
-    return response(response_data, HTTPStatus.OK)
+    try:
+        response_data = await get_network_list_with_details()
+        return response(response_data, HTTPStatus.OK)
+    except Exception as e:
+        raise HTTPInternalServerError(text=str(e))
+    
 
 
 async def get_network_coverage(latitude, longitude):
@@ -71,9 +74,6 @@ async def get_network_coverage(latitude, longitude):
      :raises: BadRequest
      """
     logging.info("In get_network_coverage method")
-
-    if (latitude is None or longitude is None):
-        raise HTTPBadRequest(text="Invalid latitude or longitude value")
 
     response_data = await get_network_coverage_details(latitude, longitude)
     return response(response_data, HTTPStatus.OK)

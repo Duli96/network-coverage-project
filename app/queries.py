@@ -6,7 +6,7 @@ from psycopg2 import DataError
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID, insert
 from numpy import ediff1d
 from aiohttp.web_exceptions import HTTPBadRequest, HTTPNotFound
-from sqlalchemy import and_, func
+from sqlalchemy import and_, func, or_
 from app.models import models
 from app import db,logging
 from geoalchemy2 import func
@@ -182,14 +182,19 @@ async def get_edge_list(network_id):
 
 # Execute queries to find network coverage
 async def get_network_coverage_details(latitude,longitude):
-    location_geo_point = create_point(longitude,latitude)   
-    network_list = await get_network_list()
+    location_geo_point = create_point(longitude,latitude)
+    node_list = await load_networks_with_tower_nodes(location_geo_point)
     coverage_network_list = []
-    for network in network_list:
-        tower_list = await get_tower_list(network,location_geo_point)
+    for network in  node_list:
+        tower_list = list(filter(lambda node:node.type == "Tower",network.nodes))
+        central_hub = list(filter(lambda node:node.type == "Tower",network.nodes))
         if tower_list:
             tower_list_dict = [convert_tower_data_to_dict(tower) for tower in tower_list]
-            network["towers"] = tower_list_dict   
+            network = network.to_dict()
+            network["latitude"] = central_hub[0].latitude
+            network["longitude"] = central_hub[0].longitude
+            network["towers"] = tower_list_dict
+            network["tower_count"] = len(tower_list_dict)   
             coverage_network_list.append(network)
     return sorted(coverage_network_list, key=lambda x:len(x["towers"]),reverse=True)     
     
@@ -230,9 +235,9 @@ async def calculate_total_cost(network_id,cost_details):
     if node_list is None or edge_list is None:
         raise HTTPNotFound(text=f"Network nodes or edges not found for network id:{network_id}")
     graph = create_graph_by_db_data(node_list,edge_list)
-    center_hub_total_cost = len(list(filter(lambda node:node.type == CENTER_HUB,node_list))) * cost_details[CENTER][COST]
-    region_hub_total_cost = len(list(filter(lambda node:node.type == REGION_HUB,node_list))) * cost_details[REGION][COST]
-    tower_total_cost = len(list(filter(lambda node:node.type == TOWER,node_list))) * cost_details[TOWER][COST]
+    center_hub_total_cost = len(list(filter(lambda node:node[1]["type"] == CENTER_HUB,graph.nodes(data=True)))) * cost_details[CENTER_HUB][COST]
+    region_hub_total_cost = len(list(filter(lambda node:node[1]['type'] == REGION_HUB,graph.nodes(data=True)))) * cost_details[REGION_HUB][COST]
+    tower_total_cost = len(list(filter(lambda node:node[1]['type'] == TOWER,graph.nodes(data=True)))) * cost_details[TOWER][COST]
     center_region_total_cost = 0
     region_tower_total_cost = 0
     for edge in graph.edges(data=True):
@@ -250,6 +255,7 @@ async def calculate_total_cost(network_id,cost_details):
 async def get_network_from_db(network_id):
     try:
         network = await models.Network.get(network_id)
+        print(type)
         return network
     except Exception:
         raise HTTPBadRequest(text=f"Invalid network id: {network_id} length must be between 32..36 characters")
@@ -265,6 +271,23 @@ async def load_networks_with_nodes_and_edges():
             
         ).all()
     return network_nodes_edges
+
+# Load all the nodes and edges that belongs to each network from db
+async def load_networks_with_tower_nodes(location_geo_point):
+    query = models.Node.outerjoin(models.Network).select().where(
+        or_(
+        func.ST_DistanceSphere(location_geo_point,models.Node.geo_point)/1000 < (models.Node.radius),
+        models.Node.type == "Central Hub" 
+        )
+        )
+    network_nodes = await query.gino.load(
+        models.Network.distinct(models.Network.id).load(
+            add_node=models.Node.distinct(models.Node.id)
+            )
+            
+        ).all()
+   
+    return network_nodes
 
 
 
