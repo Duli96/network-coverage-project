@@ -42,7 +42,6 @@ async def add_new_network(graph):
     nodes_to_save = []
     towers_to_save = []
     for node in graph.nodes(data=True):
-        print("NODE",node)
         new_node_id = generate_id()
         node_id: str = node[0]
         data: dict = node[1]
@@ -52,9 +51,7 @@ async def add_new_network(graph):
         if data[TYPE] == CENTER_HUB:
             network_name = data[NAME]
             new_network = models.Network(id=network_uuid, name=network_name)
-            print("SAVED",await new_network.create())
             saved_network = await new_network.create()
-            
         if data[TYPE] == REGION_HUB:
             new_region_node = models.Node(
                 id=new_node_id,
@@ -114,9 +111,6 @@ async def add_new_network(graph):
             target_node=edge[1],
         )
         edges_to_save.append(new_edge.to_dict())
-    print("SAVED1",nodes_to_save)
-    print("SAVED1",edges_to_save)
-
     await models.Node.insert().gino.all(nodes_to_save)
     await models.Edge.insert().gino.all(edges_to_save)
     return saved_network
