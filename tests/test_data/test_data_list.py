@@ -1,6 +1,3 @@
-import uuid
-
-
 node_list = [
     {
         "id": "7d71cd95-2e98-4f35-a070-96a99958d7ac",

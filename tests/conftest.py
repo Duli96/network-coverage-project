@@ -1,16 +1,15 @@
-import os
+import json
 from pathlib import Path
-import uuid
 import pytest
 import gino
 from sqlalchemy import create_engine
 from app import create_app
 from app import db as _db
-from app.models.models import db as database, Node
-from dotenv import load_dotenv
+from app.models.models import Node
 from app.config import Config
 import networkx as nx
 from test_data import test_data_list
+from app.config import Config
 
 
 test_db_uri1 = "postgresql://user:password@localhost:5432/test_db_tower"
@@ -25,18 +24,7 @@ def config(monkeypatch):
 
 
 environment = {
-    # "HTTPS": "0",
-    # "AUTH_SERVICE_URL": PUBLIC_KEY_PATH,
-    # "SCRIPT_NAME": "/myapi",
     "SQLALCHEMY_DATABASE_URI": test_db_uri1,
-    # "ASSET_DATABASE_URL": "MOCKED",
-    # "BWT_API_URL": "MOCKED",
-    # "ASSET_DATABASE_USERNAME": "MOCKED",
-    # "ASSET_DATABASE_PASSWORD": "MOCKED",
-    # "OPENREACH_API_URL": "http://openreach-api",
-    # "OPENREACH_API_CLIENT_ID": "openreach-client-id",
-    # "OPENREACH_API_CLIENT_SECRET": "openreach-client-secret",
-    # "OPENREACH_API_DUNS": "openreach-duns",
 }
 
 
@@ -83,8 +71,6 @@ async def graph_one():
 
 @pytest.fixture
 async def graph_two():
-    # content = open(resources/'test_data/data.graphml', "r")
-    # graph = nx.parse_graphml(content.read())
     graph = nx.DiGraph()
     graph.add_nodes_from(test_data_list.node_list)
     graph.add_edges_from(test_data_list.edge_list)
@@ -113,4 +99,14 @@ async def test_tower_data():
     tower.latitude = 52.8008717
     tower.longitude = -2.3302296
     tower.radius = 15
+    tower.add_distance = 24333
     return tower
+
+
+@pytest.fixture
+async def db_data(test_client):
+    data = {"Graph File": (resources / "test_data/data-3.graphml").open("rb")}
+    response = await test_client.post("/api/network", data=data)
+    response_text = await response.text()
+    print("TEST",response_text)
+    return json.loads(response_text)["id"]

@@ -1,13 +1,7 @@
 import json
-import resource
 from unittest.mock import patch
-from wsgiref.headers import Headers
-import pytest
-import requests
 import json
-from unittest import mock
 from pathlib import Path
-from app.models import models
 
 resources = Path(__file__).parent
 
@@ -53,20 +47,15 @@ async def test_get_network_coverage_wrong_params(test_client, db):
     assert response.status == 400
 
 
-@mock.patch("app.queries.create_graph_by_db_data")
-@mock.patch("app.queries.get_network_from_db")
-async def test_get_total_cost_for_network(
-    get_network, create_graph, test_client, graph_one, db
-):
-    get_network.return_value = models.Network()
-    create_graph.return_value = graph_one
+async def test_get_total_cost_for_network(test_client, db, db_data):
+
     data = {
         "Cost File": (resources / "test_data/rate-card-1.json").open("rb"),
-        "Network id": "c8b60c12-94c7-4243-a74f-c6ced3b16841",
+        "Network id": db_data,
     }
     response = await test_client.post("/api/network/cost", data=data)
     response_text = await response.text()
-    assert json.loads(response_text)["total cost"] == 7400
+    assert json.loads(response_text)["total cost"] == 33860
     assert response.status == 200
 
 

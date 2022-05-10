@@ -1,4 +1,3 @@
-
 # Network Coverage Project
 
 This is a RESTful API that developed using python and aiohttp. The API has included CRUD operations regarding a Tower Network which contains a Center Hub, Regional Hubs and Towers. 
@@ -54,7 +53,7 @@ To run this project, you will need to add the following environment variables to
 
 `POSTGRES_PORT`
 `POSTGRES_DB`
-`SECRET_KEY`
+
 
 
 ## Installation
