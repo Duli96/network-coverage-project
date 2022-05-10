@@ -11,6 +11,7 @@ password = os.environ["POSTGRES_PASSWORD"]
 host = os.environ["POSTGRES_HOST"]
 database = os.environ["POSTGRES_DB"]
 port = os.environ["POSTGRES_PORT"]
+test_database = os.environ["TEST_DB"]
 
 
 @dataclass
@@ -18,6 +19,9 @@ class Config:
     HTTPS: bool = False
     SQLALCHEMY_DATABASE_URI: str = (
         f"postgresql://{user}:{password}@{host}:{port}/{database}"
+    )
+    SQLALCHEMY_TEST_DATABASE_URI: str = (
+        f"postgresql://{user}:{password}@{host}:{port}/{test_database}"
     )
     PROXY_WMS: bool = False
     SCRIPT_NAME: str = "api"

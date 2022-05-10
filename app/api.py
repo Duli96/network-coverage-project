@@ -79,6 +79,8 @@ async def get_total_cost_for_network(request: web.Request):
     logging.info("In get_total_cost_for_network method")
 
     form_data = await request.post()
+    if form_data["Cost File"] == "" or form_data["Network id"] == "":
+        raise HTTPBadRequest(text=str("Invalid request body"))
     if form_data["Cost File"].filename.endswith(".json"):
         file = form_data["Cost File"].file
         network_id = form_data["Network id"]

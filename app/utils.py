@@ -1,6 +1,7 @@
 import networkx as nx
 import uuid
 
+
 # Generate a unique UUID
 def generate_id():
     return uuid.uuid4()
@@ -53,5 +54,6 @@ def convert_tower_data_to_dict(tower):
         "latitude": tower.latitude,
         "longitude": tower.longitude,
         "radius": tower.radius,
+        "distance": round(tower.distance / 1000, 2),
     }
     return data

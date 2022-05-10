@@ -1,17 +1,11 @@
 from __future__ import annotations
-from curses import meta
-from importlib_metadata import metadata
 from sqlalchemy import MetaData
-from sqlalchemy.orm import scoped_session, sessionmaker
 import logging
 import connexion
 from typing import Any
 from app.config import Config
 from aiohttp import web
-
-
 import gino
-from gino.schema import GinoSchemaVisitor
 
 logging.basicConfig(level=logging.INFO)
 db = gino.Gino()

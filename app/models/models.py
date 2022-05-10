@@ -1,7 +1,6 @@
 from app import db
 from geoalchemy2 import Geometry
-import gino
-from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID, insert
+from sqlalchemy.dialects.postgresql import UUID
 
 
 class Network(db.Model):
@@ -34,6 +33,18 @@ class Network(db.Model):
 
 class Node(db.Model):
     __tablename__ = "nodes"
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self._distance = 0
+
+    @property
+    def distance(self):
+        return self._distance
+
+    @distance.setter
+    def add_distance(self, distance):
+        self._distance = distance
 
     id = id = db.Column(UUID(), primary_key=True)
     network_id = db.Column(UUID(), db.ForeignKey("networks.id"))
