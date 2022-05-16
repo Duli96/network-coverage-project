@@ -1,5 +1,5 @@
 from __future__ import annotations
-from sqlalchemy import MetaData
+# from sqlalchemy import MetaData
 import logging
 import connexion
 from typing import Any
@@ -9,7 +9,7 @@ import gino
 
 logging.basicConfig(level=logging.INFO)
 db = gino.Gino()
-metadata = MetaData()
+# metadata = MetaData()
 __version__ = "dev"
 
 
